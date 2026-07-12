@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     app_env: str = "development"
     log_level: str = "INFO"
     allowed_origins: list[str] = ["http://localhost:5173"]
+    max_upload_size_mb: int = 10
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
