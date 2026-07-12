@@ -14,10 +14,12 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // Forwards frontend API calls to the FastAPI backend during local dev
+      // Strips /api prefix before forwarding to the FastAPI backend.
+      // e.g. /api/predict → http://localhost:8000/predict
       "/api": {
         target: "http://localhost:8000",
         changeOrigin: true,
+        rewrite: (path: string) => path.replace(/^\/api/, ""),
       },
     },
   },
