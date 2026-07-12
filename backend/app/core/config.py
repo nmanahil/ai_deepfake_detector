@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     allowed_origins: list[str] = ["http://localhost:5173"]
     max_upload_size_mb: int = 10
+    database_url: str = "sqlite:///./deepfake_detector.db"
+    reports_dir: str = "reports"  # relative to the working directory (backend/)
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 

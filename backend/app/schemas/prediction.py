@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 
@@ -13,7 +14,27 @@ class PredictionResult(BaseModel):
 class PredictResponse(BaseModel):
     """API response schema for POST /predict."""
 
+    id: int
     label: str
     confidence: float = Field(ge=0.0, le=1.0)
-    explanation: str  # human-readable summary, e.g. "Likely fake (94.2% confidence)"
+    explanation: str
     heatmap_b64: str | None = None
+
+
+class PredictionRecordSchema(BaseModel):
+    """Serialised view of a persisted PredictionRecord."""
+
+    id: int
+    created_at: datetime
+    filename: str
+    label: str
+    confidence: float
+    explanation: str
+    heatmap_path: str | None = None
+
+    model_config = {"from_attributes": True}
+
+
+class HistoryResponse(BaseModel):
+    total: int
+    items: list[PredictionRecordSchema]

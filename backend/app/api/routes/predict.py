@@ -1,7 +1,9 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
+from sqlalchemy.orm import Session
 from app.core.config import Settings, get_settings
 from app.core.exceptions import InvalidImageError, ModelInferenceError
+from app.db.session import get_db
 from app.schemas.prediction import PredictResponse
 from app.services.prediction_service import PredictionService, get_prediction_service
 
@@ -17,6 +19,7 @@ async def predict(
     file: UploadFile = File(...),
     settings: Settings = Depends(get_settings),
     service: PredictionService = Depends(get_prediction_service),
+    db: Session = Depends(get_db),
 ) -> PredictResponse:
     if file.content_type not in _ALLOWED_CONTENT_TYPES:
         raise HTTPException(
@@ -34,7 +37,11 @@ async def predict(
         )
 
     try:
-        return service.predict(data)
+        return service.predict(
+            image_bytes=data,
+            filename=file.filename or "unknown",
+            db=db,
+        )
     except InvalidImageError as exc:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,

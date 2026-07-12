@@ -18,6 +18,7 @@ def _png_bytes(size: int = 100) -> bytes:
 
 
 _MOCK_RESPONSE = PredictResponse(
+    id=1,
     label="real",
     confidence=0.92,
     explanation="Likely real (92.0% confidence)",
