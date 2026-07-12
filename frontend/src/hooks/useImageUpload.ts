@@ -15,16 +15,19 @@ type UploadState =
 
 interface UseImageUploadReturn {
   state: UploadState;
+  selectedFile: File | null;
   upload: (file: File) => void;
   reset: () => void;
 }
 
 export function useImageUpload(): UseImageUploadReturn {
   const [state, setState] = useState<UploadState>({ status: "idle" });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   // Keep a ref to the active XHR so we can abort on unmount or reset
   const xhrRef = useRef<XMLHttpRequest | null>(null);
 
   const upload = useCallback((file: File) => {
+    setSelectedFile(file);
     // Abort any in-flight request before starting a new one
     xhrRef.current?.abort();
 
@@ -68,8 +71,9 @@ export function useImageUpload(): UseImageUploadReturn {
 
   const reset = useCallback(() => {
     xhrRef.current?.abort();
+    setSelectedFile(null);
     setState({ status: "idle" });
   }, []);
 
-  return { state, upload, reset };
+  return { state, selectedFile, upload, reset };
 }
