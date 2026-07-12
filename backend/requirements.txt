@@ -3,3 +3,13 @@ uvicorn[standard]==0.30.6
 pydantic==2.9.2
 pydantic-settings==2.5.2
 python-dotenv==1.0.1
+# ML dependencies — torch 2.2.2 is the latest wheel available for macOS/Python 3.12
+torch==2.2.2
+transformers==4.44.2
+Pillow==10.4.0
+numpy<2  # torch 2.2.x is incompatible with numpy 2.x
+# ML dependencies
+torch==2.3.1+cpu
+torchvision==0.18.1+cpu
+transformers==4.44.2
+Pillow==10.4.0

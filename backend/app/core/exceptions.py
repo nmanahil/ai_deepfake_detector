@@ -5,3 +5,13 @@ class AppError(Exception):
         super().__init__(message)
         self.message = message
         self.status_code = status_code
+
+
+class InvalidImageError(AppError):
+    def __init__(self, message: str = "Invalid or corrupt image data.") -> None:
+        super().__init__(message, status_code=422)
+
+
+class ModelInferenceError(AppError):
+    def __init__(self, message: str = "Model inference failed.") -> None:
+        super().__init__(message, status_code=500)
